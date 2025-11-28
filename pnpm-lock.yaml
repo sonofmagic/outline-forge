@@ -146,6 +146,9 @@ importers:
       tailwind-variants:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.17)
+      outline-forge:
+        specifier: workspace:*
+        version: link:packages/outline-forge
       vue:
         specifier: ^3.5.25
         version: 3.5.25(typescript@5.9.3)

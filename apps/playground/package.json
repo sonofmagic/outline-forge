@@ -30,6 +30,7 @@
     "@tanstack/vue-virtual": "^3.13.12",
     "@trpc/client": "^11.7.2",
     "clsx": "^2.1.1",
+    "outline-forge": "workspace:*",
     "pinia": "^3.0.4",
     "tailwind-merge": "^3.4.0",
     "tailwind-variants": "^3.2.2",

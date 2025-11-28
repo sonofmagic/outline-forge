@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(import.meta.dirname, 'src'),
       '~': import.meta.dirname,
+      'outline-forge': path.resolve(import.meta.dirname, '../../packages/outline-forge/lib'),
     },
   },
   plugins: [
