@@ -55,7 +55,10 @@ function getImageDataFromImage(
     return ctx.getImageData(0, 0, targetWidth, targetHeight)
   }
   catch (error) {
-    console.warn('[png-clip-path] Unable to read pixels from image', error)
+    if (import.meta.env?.DEV) {
+      // eslint-disable-next-line no-console
+      console.warn('[png-clip-path] Unable to read pixels from image', error)
+    }
     return null
   }
 }
@@ -134,7 +137,10 @@ function traceBoundary(mask: Uint8Array, width: number, height: number): Point[]
     }
     iterations += 1
     if (iterations > maxIterations) {
-      console.warn('[png-clip-path] boundary tracing aborted (too many iterations)')
+      if (import.meta.env?.DEV) {
+        // eslint-disable-next-line no-console
+        console.warn('[png-clip-path] boundary tracing aborted (too many iterations)')
+      }
       break
     }
   } while (current.x !== start.x || current.y !== start.y)
