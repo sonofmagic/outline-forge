@@ -19,20 +19,20 @@ const emit = defineEmits<{
 }>()
 
 const activeQualityClasses = [
-  'border-emerald-300/80',
-  'bg-emerald-400/10',
-  'text-white',
+  'border-playground-accent',
+  'bg-playground-accent-soft',
+  'text-playground-foreground',
   'shadow-[0_0_25px_rgba(16,185,129,0.35)]',
 ] as const
 
 const inactiveQualityClasses = [
-  'border-white/10',
-  'text-slate-300',
-  'hover:border-white/30',
-  'hover:text-white',
+  'border-playground-border',
+  'text-playground-muted',
+  'hover:border-playground-ring',
+  'hover:text-playground-foreground',
 ] as const
 
-function imageStyle(image: ImageDemo) {
+function figureStyle(image: ImageDemo) {
   const clip = image.clipPath
     ? {
         clipPath: image.clipPath,
@@ -42,8 +42,6 @@ function imageStyle(image: ImageDemo) {
   return {
     width: `${image.width}px`,
     height: `${image.height}px`,
-    outline: `${image.outlineWidth}px ${image.outlineStyle} ${image.outlineColor}`,
-    outlineOffset: `${image.outlineOffset}px`,
     ...clip,
   }
 }
@@ -55,65 +53,66 @@ function selectQuality(option: PngQuality) {
 }
 
 function textClass(option: PngQuality) {
-  return option === props.selectedQuality ? 'text-emerald-200' : 'text-slate-400'
+  return option === props.selectedQuality ? 'text-playground-accent' : 'text-playground-subtle'
 }
 </script>
 
 <template>
   <section
     class="
-      mt-10 grid gap-6 rounded-3xl border border-white/10 bg-slate-950/60 p-6
-      text-slate-100 shadow-2xl ring-1 ring-emerald-200/10
+      mt-10 grid gap-6 rounded-3xl border border-playground-border
+      bg-playground-surface p-6 text-playground-foreground shadow-2xl ring-1
+      ring-playground-ring
       md:grid-cols-2
     "
   >
     <div class="space-y-3">
-      <p class="text-xs tracking-[0.25em] text-emerald-200 uppercase">
+      <p class="text-xs tracking-[0.25em] text-playground-accent uppercase">
         PNG overlay
       </p>
-      <h3 class="text-2xl font-semibold text-white">
+      <h3 class="text-2xl font-semibold text-playground-foreground">
         Transparent PNG tracing
       </h3>
-      <p class="text-sm text-slate-300">
-        Outline Forge reads clip-path data on an actual PNG so the stroke hugs the portrait,
-        instead of defaulting to its rectangular box.
+      <p class="text-sm text-playground-muted">
+        This section highlights a PNG portrait so the Driver.js tour can jump to it and describe your
+        onboarding cues.
       </p>
       <dl
         class="
-          grid gap-3 text-xs text-slate-300
+          grid gap-3 text-xs text-playground-muted
           sm:grid-cols-2
         "
       >
-        <div class="rounded-2xl bg-white/5 px-3 py-2">
-          <p class="tracking-wide text-slate-400 uppercase">
+        <div class="rounded-2xl bg-playground-soft px-3 py-2">
+          <p class="tracking-wide text-playground-subtle uppercase">
             Outline width
           </p>
-          <p class="mt-1 font-semibold text-white">
+          <p class="mt-1 font-semibold text-playground-foreground">
             {{ props.portrait.outlineWidth }}px
           </p>
         </div>
-        <div class="rounded-2xl bg-white/5 px-3 py-2">
-          <p class="tracking-wide text-slate-400 uppercase">
+        <div class="rounded-2xl bg-playground-soft px-3 py-2">
+          <p class="tracking-wide text-playground-subtle uppercase">
             Offset
           </p>
-          <p class="mt-1 font-semibold text-white">
+          <p class="mt-1 font-semibold text-playground-foreground">
             {{ props.portrait.outlineOffset }}px
           </p>
         </div>
       </dl>
       <div class="mt-4 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
-          <p class="tracking-[0.2em] text-slate-400 uppercase">
+          <p class="tracking-[0.2em] text-playground-subtle uppercase">
             Tracing quality
           </p>
           <span
             v-if="props.isExtracting"
             class="
-              inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2
-              py-1 text-emerald-200
+              inline-flex items-center gap-1 rounded-full
+              bg-playground-accent-soft px-2 py-1 text-playground-accent
             "
           >
-            <span class="size-1.5 rounded-full bg-emerald-300" />
+            <span class="size-1.5 rounded-full bg-playground-accent" />
             Recomputing…
           </span>
         </div>
@@ -143,7 +142,7 @@ function textClass(option: PngQuality) {
             </span>
           </button>
         </div>
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-playground-subtle">
           {{ props.clipStatus }}
         </p>
       </div>
@@ -151,18 +150,18 @@ function textClass(option: PngQuality) {
     <div class="flex items-center justify-center">
       <div
         class="
-          rounded-[32px] bg-linear-to-b from-slate-900 via-slate-950 to-black/80
-          p-5 shadow-[0_25px_80px_rgba(8,145,178,0.35)] ring-1 ring-white/10
+          rounded-[32px] bg-linear-to-b from-playground-panel
+          via-playground-elevated to-playground-glass p-5
+          shadow-[0_25px_80px_rgba(8,145,178,0.35)] ring-1 ring-playground-ring
         "
       >
         <figure
           class="
-            overflow-hidden rounded-[28px] bg-slate-900/60 shadow-2xl ring-1
-            ring-white/10
+            overflow-hidden rounded-[28px] bg-playground-panel shadow-2xl ring-1
+            ring-playground-ring
           "
-          data-outline-forge
-          :data-outline-forge-label="props.portrait.title"
-          :style="imageStyle(props.portrait)"
+          :style="figureStyle(props.portrait)"
+          data-tour="png-image"
         >
           <img
             :src="props.portrait.src"
@@ -173,7 +172,7 @@ function textClass(option: PngQuality) {
             @load="emit('image-load', $event)"
           >
         </figure>
-        <p class="mt-4 text-center text-sm text-slate-300">
+        <p class="mt-4 text-center text-sm text-playground-muted">
           {{ props.portrait.description }}
         </p>
       </div>

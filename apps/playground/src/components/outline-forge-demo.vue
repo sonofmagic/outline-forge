@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import type { PngQuality } from './outline-forge-demo/use-outline-forge-demo'
-
+import { usePlaygroundTheme } from '@/composables/use-playground-theme'
 import OutlineForgeCardGrid from './outline-forge-demo/outline-forge-card-grid.vue'
+import OutlineForgeFreeflow from './outline-forge-demo/outline-forge-freeflow.vue'
 import OutlineForgeHero from './outline-forge-demo/outline-forge-hero.vue'
 import OutlineForgePngShowcase from './outline-forge-demo/outline-forge-png-showcase.vue'
+import OutlineForgePolygonCollage from './outline-forge-demo/outline-forge-polygon-collage.vue'
+import OutlineForgeRectGallery from './outline-forge-demo/outline-forge-rect-gallery.vue'
 import OutlineForgeShapeShowcase from './outline-forge-demo/outline-forge-shape-showcase.vue'
 import { useOutlineForgeDemo } from './outline-forge-demo/use-outline-forge-demo'
+import PlaygroundTour from './playground-tour.vue'
+
+const { theme, toggleTheme } = usePlaygroundTheme()
 
 const {
   cards,
@@ -31,11 +37,17 @@ function handleQualityChange(quality: PngQuality) {
 <template>
   <section
     class="
-      rounded-3xl border border-slate-800/80 bg-slate-900/60 p-6 text-slate-50
-      shadow-2xl ring-1 ring-white/5
+      rounded-3xl border border-playground-border bg-playground-surface p-6
+      text-playground-foreground shadow-2xl ring-1 ring-playground-ring
     "
   >
-    <OutlineForgeHero @randomize="randomizeCards" @refresh="refreshForge" />
+    <PlaygroundTour />
+    <OutlineForgeHero
+      :theme="theme"
+      @randomize="randomizeCards"
+      @refresh="refreshForge"
+      @toggle-theme="toggleTheme"
+    />
     <OutlineForgeCardGrid :cards="cards" />
     <OutlineForgeShapeShowcase :shapes="shapeDemos" />
     <OutlineForgePngShowcase
@@ -47,5 +59,8 @@ function handleQualityChange(quality: PngQuality) {
       @quality-change="handleQualityChange"
       @image-load="handlePngLoad"
     />
+    <OutlineForgeRectGallery />
+    <OutlineForgePolygonCollage />
+    <OutlineForgeFreeflow />
   </section>
 </template>

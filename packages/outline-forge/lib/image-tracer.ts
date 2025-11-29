@@ -16,9 +16,7 @@ const NEIGHBORS: Point[] = [
 
 export interface PNGClipPathOptions {
   alphaThreshold?: number
-  /** Maximum dimension (px) used to downscale the source before tracing */
   maxDimension?: number
-  /** Simplification tolerance in px on the scaled canvas */
   simplifyTolerance?: number
 }
 
@@ -57,7 +55,7 @@ function getImageDataFromImage(
   catch (error) {
     if (import.meta.env?.DEV) {
       // eslint-disable-next-line no-console
-      console.warn('[png-clip-path] Unable to read pixels from image', error)
+      console.warn('[outline-forge] Unable to read pixels from image', error)
     }
     return null
   }
@@ -113,7 +111,7 @@ function traceBoundary(mask: Uint8Array, width: number, height: number): Point[]
 
   const boundary: Point[] = []
   let current = { ...start }
-  let backtrackIndex = 4 // start by checking neighbor to the left
+  let backtrackIndex = 4
   const maxIterations = width * height * 4
   let iterations = 0
 
@@ -139,7 +137,7 @@ function traceBoundary(mask: Uint8Array, width: number, height: number): Point[]
     if (iterations > maxIterations) {
       if (import.meta.env?.DEV) {
         // eslint-disable-next-line no-console
-        console.warn('[png-clip-path] boundary tracing aborted (too many iterations)')
+        console.warn('[outline-forge] boundary tracing aborted (too many iterations)')
       }
       break
     }

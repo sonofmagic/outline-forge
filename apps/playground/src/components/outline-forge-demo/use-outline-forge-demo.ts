@@ -1,15 +1,5 @@
-import { OutlineForge } from 'outline-forge'
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  shallowRef,
-  watch,
-} from 'vue'
+import { computed, reactive, ref } from 'vue'
 import forgeAvatar from '@/assets/forge-avatar.png'
-import { extractClipPathFromImage } from '@/utils/png-clip-path'
 
 export type StrokeStyle = 'solid' | 'dashed' | 'dotted'
 
@@ -80,27 +70,6 @@ const qualityOptions = [
     description: 'Smoothest outline',
   },
 ] as const satisfies ReadonlyArray<QualityOption>
-
-const qualityPresets: Record<
-  PngQuality,
-  { maxDimension: number, simplifyTolerance: number, alphaThreshold: number }
-> = {
-  eco: {
-    maxDimension: 140,
-    simplifyTolerance: 2,
-    alphaThreshold: 12,
-  },
-  balanced: {
-    maxDimension: 200,
-    simplifyTolerance: 1.2,
-    alphaThreshold: 12,
-  },
-  high: {
-    maxDimension: 320,
-    simplifyTolerance: 0.7,
-    alphaThreshold: 10,
-  },
-}
 
 export function useOutlineForgeDemo() {
   const cards = reactive<DemoCard[]>([
@@ -189,16 +158,10 @@ export function useOutlineForgeDemo() {
     outlineStyle: 'solid',
   })
 
-  const forge = shallowRef<OutlineForge | null>(null)
-  const pngImageEl = shallowRef<HTMLImageElement | null>(null)
   const isExtractingPngClipPath = ref(false)
   const pngQuality = ref<PngQuality>('balanced')
 
-  const pngClipStatus = computed(() => (
-    pngPortrait.clipPath?.startsWith('polygon')
-      ? 'Clip-path traced from PNG transparency'
-      : 'Fallback circle mask is active'
-  ))
+  const pngClipStatus = computed(() => 'Driver tour only — outlines disabled for now')
 
   function shuffleCard(card: DemoCard) {
     card.width = Math.max(1, Math.round(Math.random() * 4) + 1)
@@ -207,71 +170,17 @@ export function useOutlineForgeDemo() {
     card.style = strokeStyles[Math.floor(Math.random() * strokeStyles.length)]!
   }
 
-  function refreshForge() {
-    forge.value?.refresh()
-  }
-
   function randomizeCards() {
     cards.forEach(shuffleCard)
-    refreshForge()
   }
 
-  async function derivePngClipPath(image?: HTMLImageElement | null) {
-    const target = image ?? pngImageEl.value
-    if (!target || !target.complete || isExtractingPngClipPath.value) {
-      return
-    }
-    isExtractingPngClipPath.value = true
-    try {
-      const preset = qualityPresets[pngQuality.value]
-      const clipPath = await extractClipPathFromImage(target, {
-        alphaThreshold: preset.alphaThreshold,
-        maxDimension: preset.maxDimension,
-        simplifyTolerance: preset.simplifyTolerance,
-      })
-      if (clipPath) {
-        pngPortrait.clipPath = clipPath
-      }
-    }
-    catch (error) {
-      if (import.meta.env?.DEV) {
-        // eslint-disable-next-line no-console
-        console.warn('[outline-forge-demo] Failed to derive PNG clip-path', error)
-      }
-    }
-    finally {
-      isExtractingPngClipPath.value = false
-      refreshForge()
-    }
+  function refreshForge() {
+    // Outline Forge is disabled; placeholder for button wiring.
   }
 
-  async function handlePngLoad(event: Event) {
-    const target = event.target
-    if (!(target instanceof HTMLImageElement)) {
-      refreshForge()
-      return
-    }
-    pngImageEl.value = target
-    await derivePngClipPath(target)
+  function handlePngLoad() {
+    // No-op while Outline Forge is disabled.
   }
-
-  onMounted(() => {
-    const instance = new OutlineForge({
-      selector: '[data-outline-forge]',
-      showLabel: true,
-    })
-    instance.start()
-    forge.value = instance
-  })
-
-  onBeforeUnmount(() => {
-    forge.value?.destroy()
-    forge.value = null
-  })
-
-  watch(pngQuality, () => {
-    void derivePngClipPath()
-  })
 
   return {
     cards,

@@ -1,1 +1,78 @@
 @import 'tailwindcss';
+
+:root {
+  --playground-shell: oklch(0.17 0.032 258);
+  --playground-surface: color-mix(in oklab, var(--playground-shell), white 12%);
+  --playground-panel: color-mix(in oklab, var(--playground-surface), white 6%);
+  --playground-elevated: color-mix(in oklab, var(--playground-panel), black 4%);
+  --playground-soft: color-mix(in oklab, var(--playground-panel), white 14%);
+  --playground-glass: color-mix(in oklab, var(--playground-shell), transparent 55%);
+  --playground-border: color-mix(in oklab, var(--playground-panel), white 26%);
+  --playground-border-muted: color-mix(in oklab, var(--playground-border), transparent 45%);
+  --playground-ring: color-mix(in oklab, var(--playground-border), white 12%);
+  --playground-foreground: oklch(0.98 0.02 255);
+  --playground-foreground-soft: oklch(0.92 0.015 255);
+  --playground-muted: oklch(0.78 0.02 255);
+  --playground-subtle: oklch(0.64 0.02 255);
+  --playground-pill: color-mix(in oklab, var(--playground-foreground), transparent 82%);
+  --playground-chip: color-mix(in oklab, var(--playground-foreground), transparent 88%);
+  --playground-accent: oklch(0.79 0.16 160);
+  --playground-accent-soft: color-mix(in oklab, var(--playground-accent), transparent 70%);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+:root[data-playground-theme='light'] {
+  color-scheme: light;
+  --playground-shell: oklch(0.98 0.01 230);
+  --playground-surface: color-mix(in oklab, var(--playground-shell), black 4%);
+  --playground-panel: color-mix(in oklab, var(--playground-surface), black 3%);
+  --playground-elevated: color-mix(in oklab, var(--playground-panel), black 5%);
+  --playground-soft: color-mix(in oklab, var(--playground-panel), black 7%);
+  --playground-glass: color-mix(in oklab, var(--playground-panel), transparent 45%);
+  --playground-border: color-mix(in oklab, var(--playground-panel), black 18%);
+  --playground-border-muted: color-mix(in oklab, var(--playground-border), transparent 45%);
+  --playground-ring: color-mix(in oklab, var(--playground-border), black 10%);
+  --playground-foreground: oklch(0.2 0.05 258);
+  --playground-foreground-soft: oklch(0.32 0.04 258);
+  --playground-muted: oklch(0.47 0.03 258);
+  --playground-subtle: oklch(0.58 0.02 258);
+  --playground-pill: color-mix(in oklab, var(--playground-foreground), transparent 75%);
+  --playground-chip: color-mix(in oklab, var(--playground-foreground), transparent 82%);
+  --playground-accent: oklch(0.67 0.16 162);
+  --playground-accent-soft: color-mix(in oklab, var(--playground-accent), transparent 78%);
+}
+
+@layer base {
+  :root,
+  body {
+    background-color: var(--playground-shell);
+    color: var(--playground-foreground);
+  }
+
+  body {
+    min-height: 100vh;
+  }
+}
+
+@theme inline {
+  --color-playground-shell: var(--playground-shell);
+  --color-playground-surface: var(--playground-surface);
+  --color-playground-panel: var(--playground-panel);
+  --color-playground-soft: var(--playground-soft);
+  --color-playground-elevated: var(--playground-elevated);
+  --color-playground-glass: var(--playground-glass);
+  --color-playground-pill: var(--playground-pill);
+  --color-playground-chip: var(--playground-chip);
+  --color-playground-foreground: var(--playground-foreground);
+  --color-playground-foreground-soft: var(--playground-foreground-soft);
+  --color-playground-muted: var(--playground-muted);
+  --color-playground-subtle: var(--playground-subtle);
+  --color-playground-border: var(--playground-border);
+  --color-playground-border-muted: var(--playground-border-muted);
+  --color-playground-ring: var(--playground-ring);
+  --color-playground-accent: var(--playground-accent);
+  --color-playground-accent-soft: var(--playground-accent-soft);
+}

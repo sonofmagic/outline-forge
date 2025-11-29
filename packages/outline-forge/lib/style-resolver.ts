@@ -18,6 +18,42 @@ const KEYWORD_LENGTHS: Record<string, number> = {
 
 const FALLBACK_COLOR = 'rgba(99, 102, 241, 0.9)' // indigo accent for visibility
 
+function normalizeDatasetStyle(raw?: string | null): OutlineStyleName | undefined {
+  if (!raw) {
+    return undefined
+  }
+  const style = raw.toLowerCase() as OutlineStyleName
+  if (style === 'auto') {
+    return 'solid'
+  }
+  return style
+}
+
+function parseDatasetLength(value?: string | null): number {
+  if (!value) {
+    return 0
+  }
+  return parseCssLength(value)
+}
+
+function resolveDatasetStyle(element: HTMLElement): OutlineVisualStyle | null {
+  const width = parseDatasetLength(element.dataset.outlineForgeWidth)
+  if (width <= 0) {
+    return null
+  }
+  const offset = parseDatasetLength(element.dataset.outlineForgeOffset)
+  const color = element.dataset.outlineForgeColor || FALLBACK_COLOR
+  const style = normalizeDatasetStyle(element.dataset.outlineForgeStyle) ?? 'solid'
+
+  return {
+    width,
+    offset,
+    color,
+    style,
+    dasharray: mapStrokeDasharray(style),
+  }
+}
+
 export function parseCssLength(raw?: string | null): number {
   if (!raw) {
     return 0
@@ -48,6 +84,11 @@ export function resolveOutlineStyle(element: HTMLElement): OutlineVisualStyle | 
   const view = element.ownerDocument?.defaultView
   if (!view) {
     return null
+  }
+
+  const datasetStyle = resolveDatasetStyle(element)
+  if (datasetStyle) {
+    return datasetStyle
   }
 
   const computed = view.getComputedStyle(element)

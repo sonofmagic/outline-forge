@@ -10,8 +10,6 @@ function shapeStyle(shape: ShapeDemo) {
     borderRadius: shape.borderRadius,
     clipPath: shape.clipPath,
     background: shape.background,
-    outline: `${shape.outlineWidth}px ${shape.outlineStyle} ${shape.outlineColor}`,
-    outlineOffset: `${shape.outlineOffset}px`,
   }
 }
 </script>
@@ -19,18 +17,19 @@ function shapeStyle(shape: ShapeDemo) {
 <template>
   <section
     class="
-      mt-10 rounded-2xl border border-white/5 bg-white/5 p-6 text-center
-      text-white/90 shadow-inner shadow-black/40
+      mt-10 rounded-2xl border border-playground-border bg-playground-panel p-6
+      text-center text-playground-foreground shadow-inner shadow-black/40
     "
+    data-tour="shapes"
   >
     <div class="space-y-2">
-      <p class="text-xs tracking-[0.25em] text-emerald-200 uppercase">
+      <p class="text-xs tracking-[0.25em] text-playground-accent uppercase">
         Shape overlays
       </p>
-      <h3 class="text-xl font-semibold text-white">
+      <h3 class="text-xl font-semibold text-playground-foreground">
         Circle, ellipse & polygon outlines
       </h3>
-      <p class="text-sm text-slate-200">
+      <p class="text-sm text-playground-foreground-soft">
         Hover any shape to see how Outline Forge respects non-rectangular outlines.
       </p>
     </div>
@@ -42,19 +41,22 @@ function shapeStyle(shape: ShapeDemo) {
       >
         <div
           class="
-            flex items-center justify-center shadow-2xl ring-1 ring-white/10
-            transition
+            flex items-center justify-center shadow-2xl ring-1
+            ring-playground-ring transition
             hover:-translate-y-1
           "
-          data-outline-forge
-          :data-outline-forge-label="shape.title"
           :style="shapeStyle(shape)"
+          :data-tour="shape.id === 1 ? 'shape-circle' : undefined"
         >
-          <span class="text-base font-semibold tracking-wide text-white">
+          <span
+            class="
+              text-base font-semibold tracking-wide text-playground-foreground
+            "
+          >
             {{ shape.title }}
           </span>
         </div>
-        <p class="text-sm text-slate-200">
+        <p class="text-sm text-playground-foreground-soft">
           {{ shape.description }}
         </p>
       </div>

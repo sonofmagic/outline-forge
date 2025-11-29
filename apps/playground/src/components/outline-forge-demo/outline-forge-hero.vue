@@ -1,7 +1,10 @@
 <script setup lang="ts">
+const props = defineProps<{ theme: 'light' | 'dark' }>()
+
 const emit = defineEmits<{
   (e: 'randomize'): void
   (e: 'refresh'): void
+  (e: 'toggle-theme'): void
 }>()
 </script>
 
@@ -10,40 +13,52 @@ const emit = defineEmits<{
     <div class="space-y-1">
       <p
         class="
-          text-xs font-semibold tracking-[0.25em] text-emerald-300 uppercase
+          text-xs font-semibold tracking-[0.25em] text-playground-accent
+          uppercase
         "
       >
-        Outline Forge
+        Driver.js Demo
       </p>
-      <h2 class="text-2xl leading-snug font-semibold text-white">
-        Inspect outlines with SVG overlays
+      <h2 class="text-2xl leading-snug font-semibold text-playground-foreground">
+        Tour irregular shapes & floating PNGs
       </h2>
-      <p class="text-sm text-slate-300">
-        Hover or focus a card to watch the overlay follow CSS outline width, style and offset.
+      <p class="text-sm text-playground-muted">
+        Outline Forge overlays are disabled for now; use the guided tour to explore each irregular element.
       </p>
     </div>
     <div class="flex flex-wrap gap-2">
       <button
         class="
-          rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm
-          font-semibold text-white transition
-          hover:border-white/40 hover:bg-white/20
+          rounded-full border border-playground-border bg-playground-soft px-4
+          py-2 text-sm font-semibold text-playground-foreground transition
+          hover:border-playground-ring hover:bg-playground-panel
         "
         type="button"
         @click="emit('randomize')"
       >
-        Randomize outlines
+        Shuffle demo data
       </button>
       <button
         class="
-          rounded-full border border-white/10 px-4 py-2 text-sm font-semibold
-          text-white/70 transition
-          hover:border-white/30 hover:text-white
+          rounded-full border border-playground-border px-4 py-2 text-sm
+          font-semibold text-playground-muted transition
+          hover:border-playground-ring hover:text-playground-foreground
         "
         type="button"
         @click="emit('refresh')"
       >
-        Refresh overlay
+        Restart tour
+      </button>
+      <button
+        class="
+          rounded-full border border-playground-border px-4 py-2 text-sm
+          font-semibold text-playground-foreground-soft transition
+          hover:border-playground-ring hover:text-playground-foreground
+        "
+        type="button"
+        @click="emit('toggle-theme')"
+      >
+        {{ props.theme === 'light' ? 'Switch to dark' : 'Switch to light' }} mode
       </button>
     </div>
   </div>

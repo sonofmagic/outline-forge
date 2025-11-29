@@ -2,13 +2,6 @@
 import type { DemoCard } from './use-outline-forge-demo'
 
 const props = defineProps<{ cards: DemoCard[] }>()
-
-function styleFor(card: DemoCard) {
-  return {
-    outline: `${card.width}px ${card.style} ${card.color}`,
-    outlineOffset: `${card.offset}px`,
-  }
-}
 </script>
 
 <template>
@@ -17,43 +10,45 @@ function styleFor(card: DemoCard) {
       mt-6 grid gap-4
       md:grid-cols-3
     "
+    data-tour="cards"
   >
     <article
       v-for="card in props.cards"
       :key="card.id"
       class="
-        rounded-2xl border border-white/10 bg-white/5 p-4 transition
-        focus-within:border-white/30
-        hover:border-white/30
+        rounded-2xl border border-playground-border bg-playground-panel p-4
+        transition
+        focus-within:border-playground-ring
+        hover:border-playground-ring
       "
-      data-outline-forge
-      :data-outline-forge-label="card.title"
-      :style="styleFor(card)"
     >
-      <p class="text-sm font-semibold text-emerald-200">
+      <p class="text-sm font-semibold text-playground-accent">
         {{ card.title }}
       </p>
-      <p class="mt-2 text-sm text-slate-200">
+      <p class="mt-2 text-sm text-playground-foreground-soft">
         {{ card.description }}
       </p>
-      <dl class="mt-4 flex flex-wrap gap-2 text-xs text-slate-300">
+      <dl class="mt-4 flex flex-wrap gap-2 text-xs text-playground-muted">
         <div
           class="
-            rounded-full bg-black/30 px-3 py-1 font-mono tracking-wide uppercase
+            rounded-full bg-playground-glass px-3 py-1 font-mono tracking-wide
+            text-playground-foreground uppercase
           "
         >
           Width {{ card.width }}px
         </div>
         <div
           class="
-            rounded-full bg-black/30 px-3 py-1 font-mono tracking-wide uppercase
+            rounded-full bg-playground-glass px-3 py-1 font-mono tracking-wide
+            text-playground-foreground uppercase
           "
         >
           Offset {{ card.offset }}px
         </div>
         <div
           class="
-            rounded-full bg-black/30 px-3 py-1 font-mono tracking-wide uppercase
+            rounded-full bg-playground-glass px-3 py-1 font-mono tracking-wide
+            text-playground-foreground uppercase
           "
         >
           {{ card.style }}
@@ -62,10 +57,10 @@ function styleFor(card: DemoCard) {
       <button
         class="
           mt-4 inline-flex w-full items-center justify-center rounded-full
-          border border-white/30 bg-black/30 px-3 py-2 text-sm font-semibold
-          text-white transition
-          hover:border-white/60 hover:bg-white/10
-          focus-visible:ring-2 focus-visible:ring-emerald-400
+          border border-playground-border bg-playground-glass px-3 py-2 text-sm
+          font-semibold text-playground-foreground transition
+          hover:border-playground-ring hover:bg-playground-panel
+          focus-visible:ring-2 focus-visible:ring-playground-accent
           focus-visible:outline-none
         "
         type="button"
