@@ -2,6 +2,7 @@
 import { OutlineForge } from 'outline-forge'
 import { onBeforeUnmount, onMounted, reactive, shallowRef } from 'vue'
 import forgeAvatar from '@/assets/forge-avatar.png'
+import { extractClipPathFromImage } from '@/utils/png-clip-path'
 
 type StrokeStyle = 'solid' | 'dashed' | 'dotted'
 
@@ -37,7 +38,7 @@ interface ImageDemo {
   alt: string
   width: number
   height: number
-  clipPath: string
+  clipPath?: string
   outlineWidth: number
   outlineOffset: number
   outlineColor: string
@@ -139,6 +140,7 @@ const pngPortrait = reactive<ImageDemo>({
 })
 
 const forge = shallowRef<OutlineForge | null>(null)
+const isExtractingPngClipPath = shallowRef(false)
 
 function styleFor(card: DemoCard) {
   return {
@@ -160,13 +162,18 @@ function shapeStyle(shape: ShapeDemo) {
 }
 
 function imageStyle(image: ImageDemo) {
+  const clip = image.clipPath
+    ? {
+        clipPath: image.clipPath,
+        WebkitClipPath: image.clipPath,
+      }
+    : {}
   return {
     width: `${image.width}px`,
     height: `${image.height}px`,
-    clipPath: image.clipPath,
-    WebkitClipPath: image.clipPath,
     outline: `${image.outlineWidth}px ${image.outlineStyle} ${image.outlineColor}`,
     outlineOffset: `${image.outlineOffset}px`,
+    ...clip,
   }
 }
 
@@ -184,6 +191,36 @@ function randomize() {
 
 function refreshForge() {
   forge.value?.refresh()
+}
+
+async function handlePngLoad(event: Event) {
+  const target = event.target
+  if (!(target instanceof HTMLImageElement)) {
+    refreshForge()
+    return
+  }
+  if (isExtractingPngClipPath.value) {
+    refreshForge()
+    return
+  }
+  isExtractingPngClipPath.value = true
+  try {
+    const clipPath = await extractClipPathFromImage(target, {
+      alphaThreshold: 12,
+      maxDimension: 200,
+      simplifyTolerance: 1.2,
+    })
+    if (clipPath) {
+      pngPortrait.clipPath = clipPath
+    }
+  }
+  catch (error) {
+    console.warn('[outline-forge-demo] Failed to derive PNG clip-path', error)
+  }
+  finally {
+    isExtractingPngClipPath.value = false
+    refreshForge()
+  }
 }
 
 onMounted(() => {
@@ -243,7 +280,7 @@ onBeforeUnmount(() => {
             hover:border-white/30 hover:text-white
           "
           type="button"
-          @click="forge?.refresh()"
+          @click="refreshForge()"
         >
           Refresh overlay
         </button>
@@ -421,7 +458,7 @@ onBeforeUnmount(() => {
               class="h-full w-full object-cover"
               loading="lazy"
               decoding="async"
-              @load="refreshForge"
+              @load="handlePngLoad"
             />
           </figure>
           <p class="mt-4 text-center text-sm text-slate-300">
