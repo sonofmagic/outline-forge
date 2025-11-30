@@ -3,6 +3,19 @@ import type { ShapeDemo } from './use-outline-forge-demo'
 
 const props = defineProps<{ shapes: ShapeDemo[] }>()
 
+function resolveShapeTourId(shape: ShapeDemo): string | undefined {
+  if (shape.id === 1) {
+    return 'shape-circle'
+  }
+  if (shape.id === 2) {
+    return 'shape-ellipse'
+  }
+  if (shape.id === 3) {
+    return 'shape-polygon'
+  }
+  return undefined
+}
+
 function shapeStyle(shape: ShapeDemo) {
   return {
     width: `${shape.width}px`,
@@ -46,7 +59,7 @@ function shapeStyle(shape: ShapeDemo) {
             hover:-translate-y-1
           "
           :style="shapeStyle(shape)"
-          :data-tour="shape.id === 1 ? 'shape-circle' : undefined"
+          :data-tour="resolveShapeTourId(shape)"
         >
           <span
             class="

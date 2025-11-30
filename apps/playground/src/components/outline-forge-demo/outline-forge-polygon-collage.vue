@@ -17,6 +17,19 @@ interface PolygonImageDemo {
   imageStyle: Record<string, string>
 }
 
+function resolvePolygonTourId(demo: PolygonImageDemo): string | undefined {
+  if (demo.id === 1) {
+    return 'polygon-target'
+  }
+  if (demo.id === 2) {
+    return 'polygon-bleed'
+  }
+  if (demo.id === 3) {
+    return 'polygon-floating'
+  }
+  return undefined
+}
+
 const demos: PolygonImageDemo[] = [
   {
     id: 1,
@@ -168,7 +181,7 @@ function imageStyle(demo: PolygonImageDemo) {
               border-playground-border-muted bg-playground-elevated
             "
             :style="wrapperStyle(demo)"
-            :data-tour="demo.id === 1 ? 'polygon-target' : undefined"
+            :data-tour="resolvePolygonTourId(demo)"
           >
             <div class="absolute inset-0">
               <img

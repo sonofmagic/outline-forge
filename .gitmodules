@@ -1,0 +1,3 @@
+[submodule "vendor/driver.js"]
+	path = vendor/driver.js
+	url = git@github.com:icebreaker-forked/driver.js.git

@@ -17,6 +17,25 @@ const KEYWORD_LENGTHS: Record<string, number> = {
 }
 
 const FALLBACK_COLOR = 'rgba(99, 102, 241, 0.9)' // indigo accent for visibility
+const SOLID_OUTLINE_STYLE: OutlineStyleName = 'solid'
+
+export function parseCssLength(raw?: string | null): number {
+  if (!raw) {
+    return 0
+  }
+
+  const value = Number.parseFloat(raw)
+  if (!Number.isNaN(value)) {
+    return value
+  }
+
+  const keywordValue = KEYWORD_LENGTHS[raw.toLowerCase()]
+  return keywordValue ?? 0
+}
+
+export function mapStrokeDasharray(style: OutlineStyleName): string | undefined {
+  return SVG_STROKE_STYLES[style]
+}
 
 function normalizeDatasetStyle(raw?: string | null): OutlineStyleName | undefined {
   if (!raw) {
@@ -24,7 +43,7 @@ function normalizeDatasetStyle(raw?: string | null): OutlineStyleName | undefine
   }
   const style = raw.toLowerCase() as OutlineStyleName
   if (style === 'auto') {
-    return 'solid'
+    return SOLID_OUTLINE_STYLE
   }
   return style
 }
@@ -43,7 +62,7 @@ function resolveDatasetStyle(element: HTMLElement): OutlineVisualStyle | null {
   }
   const offset = parseDatasetLength(element.dataset.outlineForgeOffset)
   const color = element.dataset.outlineForgeColor || FALLBACK_COLOR
-  const style = normalizeDatasetStyle(element.dataset.outlineForgeStyle) ?? 'solid'
+  const style = normalizeDatasetStyle(element.dataset.outlineForgeStyle) ?? SOLID_OUTLINE_STYLE
 
   return {
     width,
@@ -54,30 +73,12 @@ function resolveDatasetStyle(element: HTMLElement): OutlineVisualStyle | null {
   }
 }
 
-export function parseCssLength(raw?: string | null): number {
-  if (!raw) {
-    return 0
-  }
-
-  const value = Number.parseFloat(raw)
-  if (!Number.isNaN(value)) {
-    return value
-  }
-
-  const keywordValue = KEYWORD_LENGTHS[raw.toLowerCase()]
-  return keywordValue ?? 0
-}
-
 function normalizeStyle(raw: string): OutlineStyleName {
   const normalized = (raw || 'none').toLowerCase() as OutlineStyleName
   if (normalized === 'auto') {
-    return 'solid'
+    return SOLID_OUTLINE_STYLE
   }
   return normalized
-}
-
-export function mapStrokeDasharray(style: OutlineStyleName): string | undefined {
-  return SVG_STROKE_STYLES[style]
 }
 
 export function resolveOutlineStyle(element: HTMLElement): OutlineVisualStyle | null {

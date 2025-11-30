@@ -21,6 +21,20 @@ interface RectDemo {
   target?: 'container' | 'image'
 }
 
+function resolveTourId(demo: RectDemo): string | undefined {
+  if (demo.id === 1) {
+    return 'rect-inline-image'
+  }
+  if (demo.id === 2) {
+    return 'rect-pinned-png'
+  }
+  return undefined
+}
+
+function shouldTargetImage(demo: RectDemo): boolean {
+  return demo.target === 'image'
+}
+
 const demos = reactive<RectDemo[]>([
   {
     id: 1,
@@ -173,7 +187,7 @@ function handleImageLoad() {}
               bg-playground-elevated
             "
             :style="wrapperStyle(demo)"
-            :data-tour="demo.id === 1 ? 'rect-image' : undefined"
+            :data-tour="!shouldTargetImage(demo) ? resolveTourId(demo) : undefined"
           >
             <img
               :src="forgeAvatar"
@@ -182,6 +196,7 @@ function handleImageLoad() {}
               :style="imageStyle(demo)"
               loading="lazy"
               decoding="async"
+              :data-tour="shouldTargetImage(demo) ? resolveTourId(demo) : undefined"
               @load="handleImageLoad"
             >
           </div>
